@@ -13,6 +13,8 @@ import { useForm, Controller } from "react-hook-form";
 import { CustomButton } from "../components/CustomButton.js";
 import { PickerSelect } from "../components/PickerSelect.js";
 
+import useFormStore from "../store/formStore.js";
+
 export const Form = () => {
   const {
     control,
@@ -33,7 +35,18 @@ export const Form = () => {
     return true;
   };
 
-  const onSubmit = (data) => console.log(data);
+  const setFormData = useFormStore((state) => state.setFormData);
+
+  const handlePickerSelect = (value) => {
+    return value;
+  };
+
+  const onSubmit = (data) => {
+    const planValue = handlePickerSelect();
+    const formData = { ...data, Plan: planValue };
+    setFormData(formData);
+  };
+
   return (
     <>
       {errors?.Documento &&
@@ -223,27 +236,6 @@ export const Form = () => {
         }}
       />
 
-      <Controller
-        control={control}
-        name="Plan"
-        render={({ field: { onChange, value, onBlur } }) => (
-          <PickerSelect
-            placeholderlabel={"Selecciona un plan"}
-            items={[
-              { label: "3 Meses - $90.000", value: "3" },
-              { label: "6 Meses - $140.000", value: "6" },
-              { label: "12 Meses - $190.000", value: "12" },
-            ]}
-          />
-        )}
-        rules={{
-          required: {
-            value: true,
-            message: "Campo requerido",
-          },
-        }}
-      />
-
       <PickerSelect
         placeholderlabel={"Selecciona un plan"}
         items={[
@@ -251,6 +243,7 @@ export const Form = () => {
           { label: "6 Meses - $140.000", value: "6" },
           { label: "12 Meses - $190.000", value: "12" },
         ]}
+        onChange={handlePickerSelect}
       />
 
       <CustomButton

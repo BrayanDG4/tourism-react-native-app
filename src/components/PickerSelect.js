@@ -1,12 +1,15 @@
 import RNPickerSelect from "react-native-picker-select";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import useFormStore from "../store/formStore.js";
 
-export const PickerSelect = ({ items, placeholderlabel }) => {
+export const PickerSelect = ({ items, placeholderlabel, onChange }) => {
   return (
     <View style={styles.container}>
       <RNPickerSelect
         placeholder={{ label: placeholderlabel, value: null }}
-        onValueChange={(value) => console.log({ value })}
+        onValueChange={(data, value) => {
+          onChange(data, value);
+        }}
         items={items}
       />
     </View>
