@@ -1,12 +1,7 @@
 import React from "react";
+import { useState } from "react";
 
-import {
-  Text,
-  StyleSheet,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { Text, StyleSheet, TextInput, ToastAndroid } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
 
@@ -35,16 +30,42 @@ export const Form = () => {
     return true;
   };
 
+  const showToast = () => {
+    ToastAndroid.show("Enviado con éxito!", ToastAndroid.SHORT);
+  };
+
   const setFormData = useFormStore((state) => state.setFormData);
 
+  const [plan, setPlan] = useState();
+
   const handlePickerSelect = (value) => {
-    return value;
+    setPlan(value);
   };
 
   const onSubmit = (data) => {
-    const planValue = handlePickerSelect();
-    const formData = { ...data, Plan: planValue };
+    const formData = { ...data, Plan: plan };
     setFormData(formData);
+    showToast();
+    // const URL = "https://5396-181-69-29-47.ngrok-free.app";
+    // // fetch(URL).then((res) => console.log(JSON.stringify(res)));
+    // // return;
+    // let newData = {
+    //   dni: formData.Documento,
+    //   full_name: formData.Nombre,
+    //   phone: formData.Telefono,
+    //   commerce_name: formData.Comercio,
+    //   mail: formData.Correo,
+    //   commerce_type: formData.Tipo,
+    //   suscription: formData.Plan,
+    // };
+    // fetch(`${URL}/register/`, {
+    //   method: "POST",
+    //   mode: "no-cors",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(newData),
+    // }).then((res) => console.log(JSON.stringify(res)));
   };
 
   return (

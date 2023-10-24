@@ -1,17 +1,5 @@
-import {
-  View,
-  Text,
-  Image,
-  SafeAreaView,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
-import Animated, {
-  FadeIn,
-  FadeInDown,
-  FadeInUp,
-} from "react-native-reanimated";
+import { StyleSheet } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { Form } from "../components/Form";
 
@@ -21,7 +9,7 @@ export const FormView = () => {
       entering={FadeInDown.duration(1000).springify()}
       style={styles.formContainer}
     >
-      <Form/>
+      <Form />
     </Animated.View>
   );
 };

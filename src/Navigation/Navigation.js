@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 //screens
 import { HomeScreen } from "../screens/HomeScreen";
@@ -11,6 +12,8 @@ import { TourismScreen } from "../screens/TourismScreen";
 import { HotelsScreen } from "../screens/HotelsScreen";
 import { DrugStoreScreen } from "../screens/DrugStoreScreen";
 import { CommercialAlliesScreen } from "../screens/CommercialAlliesScreen";
+import { LoginScreen } from "../screens/LoginScreen";
+import { AdminScreen } from "../screens/AdminScreen";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -93,11 +96,16 @@ const TabScreen2 = () => {
   );
 };
 
+const Stack = createNativeStackNavigator();
+
 function DrawerScreen() {
   return (
     <Drawer.Navigator screenOptions={{ headerTitleAlign: "center" }}>
       <Drawer.Screen name="Principal">{() => <TabScreen1 />}</Drawer.Screen>
       <Drawer.Screen name="Servicios">{() => <TabScreen2 />}</Drawer.Screen>
+      <Drawer.Screen name="Administrador">
+        {() => <LoginScreen />}
+      </Drawer.Screen>
     </Drawer.Navigator>
   );
 }
@@ -105,7 +113,17 @@ function DrawerScreen() {
 export default function Navigation() {
   return (
     <NavigationContainer style={styles.droidSafeArea}>
-      <DrawerScreen />
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={DrawerScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AdminScreen"
+          component={AdminScreen}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
