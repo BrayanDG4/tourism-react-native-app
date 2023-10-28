@@ -25,7 +25,6 @@ import Animated, {
   FadeInUp,
 } from "react-native-reanimated";
 import { CustomButton } from "../components/CustomButton";
-import { AdminScreen } from "./AdminScreen";
 
 export const LoginScreen = () => {
   const {

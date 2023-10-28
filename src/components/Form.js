@@ -10,6 +10,8 @@ import { PickerSelect } from "../components/PickerSelect.js";
 
 import useFormStore from "../store/formStore.js";
 
+import {_URL} from '../global/globalConst.js';
+
 export const Form = () => {
   const {
     control,
@@ -38,34 +40,36 @@ export const Form = () => {
 
   const [plan, setPlan] = useState();
 
-  const handlePickerSelect = (value) => {
-    setPlan(value);
+  const handlePickerSelect = (value, index) => {
+    setPlan(index);
   };
 
   const onSubmit = (data) => {
     const formData = { ...data, Plan: plan };
     setFormData(formData);
+    console.log(formData);
     showToast();
-    // const URL = "https://5396-181-69-29-47.ngrok-free.app";
-    // // fetch(URL).then((res) => console.log(JSON.stringify(res)));
-    // // return;
-    // let newData = {
-    //   dni: formData.Documento,
-    //   full_name: formData.Nombre,
-    //   phone: formData.Telefono,
-    //   commerce_name: formData.Comercio,
-    //   mail: formData.Correo,
-    //   commerce_type: formData.Tipo,
-    //   suscription: formData.Plan,
-    // };
-    // fetch(`${URL}/register/`, {
-    //   method: "POST",
-    //   mode: "no-cors",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(newData),
-    // }).then((res) => console.log(JSON.stringify(res)));
+    const URL = _URL;
+    // fetch(URL).then((res) => console.log(JSON.stringify(res)));
+
+    let newData = {
+      dni: formData.Documento,
+      full_name: formData.Nombre,
+      phone: formData.Telefono,
+      commerce_name: formData.Comercio,
+      mail: formData.Correo,
+      commerce_type: formData.Tipo,
+      suscription: formData.Plan,
+    };
+
+    fetch(`${URL}/register`, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newData),
+    }).then((res) => console.log(JSON.stringify(res)));
   };
 
   return (

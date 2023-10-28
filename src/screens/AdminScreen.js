@@ -7,16 +7,57 @@ import {
   StyleSheet,
 } from "react-native";
 
+import { useState, useEffect } from "react";
+
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+import { _URL } from "../global/globalConst";
+
 export const AdminScreen = () => {
-  const users = [
-    { id: 1, name: "Usuario 1" },
-    { id: 2, name: "Usuario 2" },
-    { id: 3, name: "Usuario 3" },
-  ];
+  const [allies, setAllies] = useState([]);
+
+  const get = async () => {
+    const URL = _URL;
+    try {
+      const response = await fetch(`${URL}/allys`);
+      if (response.ok) {
+        const result = await response.json();
+        const initialAllies = result.allies.map((ally) => ({
+          ...ally,
+          completed: false, // Agrega un estado "completed" inicial a cada aliado
+        }));
+        setAllies(initialAllies);
+      } else {
+        console.error("Failed to fetch data");
+      }
+    } catch (error) {
+      console.error("Error while fetching data: " + error);
+    }
+
+    console.log("estado: ", JSON.stringify(allies));
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      await get();
+    }
+    fetchData();
+  }, []);
+
+  const handleCompletionToggle = (id) => {
+    // Cambia el estado "completed" del aliado con el ID correspondiente
+    setAllies((prevAllies) =>
+      prevAllies.map((ally) =>
+        ally.id === id ? { ...ally, completed: !ally.completed } : ally
+      )
+    );
+  };
+
+  // Filtra los aliados que no están completados
+  const activeAllies = allies.filter((ally) => !ally.completed);
+
   return (
     <SafeAreaView>
       {/* options container */}
@@ -33,36 +74,46 @@ export const AdminScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <FlatList
-          data={users}
-          keyExtractor={(user) => user.id.toString()}
-          style={{ marginTop: "5%" }}
-          renderItem={({ item }) => (
-            <View style={styles.commerceContainer}>
-              <View style={{ width: "80%" }}>
-                <Text>{item.name}</Text>
+        {allies.length > 0 ? (
+          <FlatList
+            data={activeAllies}
+            keyExtractor={(ally) => ally.id.toString()}
+            style={{ marginTop: "5%" }}
+            renderItem={({ item }) => (
+              <View style={styles.commerceContainer}>
+                <View style={{ width: "80%" }}>
+                  <Text>{item.commerce_name}</Text>
+                </View>
+                <View
+                  style={{
+                    width: "20%",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => handleCompletionToggle(item.id)}
+                    style={{ width: "50%" }}
+                  >
+                    <FontAwesome name="check-square" size={32} color="green" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleCompletionToggle(item.id)}
+                    style={{ width: "50%" }}
+                  >
+                    <MaterialCommunityIcons
+                      name="alpha-x-box"
+                      size={36}
+                      color="red"
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View
-                style={{
-                  width: "20%",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <TouchableOpacity style={{ width: "50%" }}>
-                  <FontAwesome name="check-square" size={32} color="green" />
-                </TouchableOpacity>
-                <TouchableOpacity style={{ width: "50%" }}>
-                  <MaterialCommunityIcons
-                    name="alpha-x-box"
-                    size={36}
-                    color="red"
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-        />
+            )}
+          />
+        ) : (
+          <Text>Cargando...</Text>
+        )}
       </View>
     </SafeAreaView>
   );

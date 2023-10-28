@@ -7,8 +7,9 @@ export const PickerSelect = ({ items, placeholderlabel, onChange }) => {
     <View style={styles.container}>
       <RNPickerSelect
         placeholder={{ label: placeholderlabel, value: null }}
-        onValueChange={(data, value) => {
-          onChange(data, value);
+        onValueChange={(value, index) => {
+          onChange(value, index);
+          console.log(index);
         }}
         items={items}
       />

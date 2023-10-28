@@ -6,7 +6,13 @@ import waves from "../../assets/commercial-allies/waves-bg.png";
 
 import homeImage from "../../assets/home-screen/home-image.jpeg";
 
+import { CustomButton } from "../components/CustomButton";
+
+import { useNavigation } from "@react-navigation/native";
+
 export const HomeScreen = () => {
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView>
       <Animated.Image
@@ -33,6 +39,15 @@ export const HomeScreen = () => {
           />
         </View>
       </View>
+
+      <CustomButton
+        onPress={() => navigation.navigate("Aliados")}
+        text={"¡Comenzar ahora!"}
+        bgColor={"#0284c7"}
+        color={"white"}
+        fontSize={18}
+        borderRadius={8}
+      />
     </SafeAreaView>
   );
 };
@@ -42,6 +57,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: '10%',
   },
   imageContainer: {
     width: "80%",
